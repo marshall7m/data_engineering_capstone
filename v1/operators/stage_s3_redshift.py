@@ -3,7 +3,7 @@ from airflow.hooks.postgres_hook import PostgresHook
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
-class StageS3ToRedshiftOperator(BaseOperator):
+class StageToRedshiftOperator(BaseOperator):
     ui_color = '#358140'
     
     #@apply_defaults

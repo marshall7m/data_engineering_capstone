@@ -1,0 +1,43 @@
+
+CREATE TABLE IF NOT EXISTS video_lessons (
+    video_id              IN4,
+    URL                   VARCHAR,
+    section               VARCHAR,
+    lesson                VARCHAR,
+    nano_degree           VARCHAR,
+    PRIMARY KEY           (video_id)
+)
+
+CREATE TABLE IF NOT EXISTS video_user_logs (
+    user_id               INT4,
+    video_id              INT4,
+    views                 INT,
+    PRIMARY KEY (user_id, video_id)
+)
+
+CREATE TABLE IF NOT EXISTS mentor_activity (
+    user_id       INT,
+    prompt        VARCHAR,
+    section       VARCHAR,
+    project       VARCHAR,
+    text          VARCHAR,
+    nano_degree   VARCHAR,
+    comments      VARCHAR,
+    PRIMARY KEY   (user_id, prompt)
+)
+
+CREATE TABLE IF NOT EXISTS section_reviews (
+    user_id        INT,
+    section        VARCHAR,
+    emoji_rating   VARCHAR,
+    review         VARCHAR,
+    PRIMARY KEY    (user_id, section)
+)
+
+CREATE TABLE IF NOT EXISTS project_reviews (
+    user_id        INT,
+    project        VARCHAR,
+    emoji_rating   VARCHAR,
+    review         VARCHAR,
+    PRIMARY KEY    (user_id, project)
+)

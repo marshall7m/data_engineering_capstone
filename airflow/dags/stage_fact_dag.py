@@ -1,4 +1,4 @@
-from operators import (CreatedTableOperator, StageToRedshiftOperator, DataQualityOperator)
+from plugins import CreatedTableOperator, StageToRedshiftOperator, DataQualityOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow import DAG
 from datetime import datetime
@@ -9,14 +9,15 @@ def stage_fact_s3_to_redshift(
     schedule_interval,
     parent_dag_name,
     redshift_conn_id,
-    aws_credentials_conn_id,
     degree_list,
     s3_data,
     sql,
     s3_bucket,
     s3_key,
+    iam_role,
     region,
     file_format,
+    extra_copy_parameters='',
     *args, **kwargs):
 
     """
@@ -51,7 +52,9 @@ def stage_fact_s3_to_redshift(
         create_task = CreatedTableOperator(
             task_id=f'create_{table}_table',
             redshift_conn_id=redshift_conn_id,
-            sql=sql.format(table)
+            sql=sql.format(table),
+            table=table,
+            start_date=start_date
         )
 
         copy_task = StageToRedshiftOperator(
@@ -59,13 +62,14 @@ def stage_fact_s3_to_redshift(
             dag=dag,
             table=table,
             redshift_conn_id=redshift_conn_id,
-            aws_credentials_id=aws_credentials_conn_id,
             s3_bucket=s3_bucket,
             s3_key=s3_key,
+            iam_role=iam_role,
             s3_data=s3_data, 
             degree=degree,
             region=region,
             file_format=file_format,
+            extra_copy_parameters=extra_copy_parameters,
             provide_context=True
             )
 

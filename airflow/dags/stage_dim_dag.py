@@ -1,22 +1,22 @@
-from operators import (CreatedTableOperator, StageToRedshiftOperator, DataQualityOperator)
+from plugins import CreatedTableOperator, StageToRedshiftOperator, DataQualityOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow import DAG
 from datetime import datetime
 
 def stage_dim_s3_to_redshift(
     start_date,
-    end_date,
     schedule_interval,
     parent_dag_name,
     redshift_conn_id,
-    aws_credentials_conn_id,
     s3_data,
     sql,
     table,
     s3_bucket,
     s3_key,
+    iam_role,
     region,
     file_format,
+    end_date=None,
     *args, **kwargs):
 
     """
@@ -33,7 +33,6 @@ def stage_dim_s3_to_redshift(
     region -- Redshift cluster configured region (str)
     file_format -- File format for AWS S3 files  (currently only: 'JSON' or 'CSV') (str)
     """
-
     task_id = f'stage_{s3_data}'
     dag = DAG(
         f'{parent_dag_name}.{task_id}',
@@ -44,11 +43,13 @@ def stage_dim_s3_to_redshift(
     )
 
     start_task = DummyOperator(task_id=f'{table}',  dag=dag)
-
+    
     create_task = CreatedTableOperator(
         task_id=f'create_{table}_table',
         redshift_conn_id=redshift_conn_id,
-        sql=sql.format(table)
+        sql=sql.format(table),
+        table=table,
+        start_date=start_date
     )
 
     copy_task = StageToRedshiftOperator(
@@ -56,9 +57,9 @@ def stage_dim_s3_to_redshift(
         dag=dag,
         table=table,
         redshift_conn_id=redshift_conn_id,
-        aws_credentials_id=aws_credentials_conn_id,
         s3_bucket=s3_bucket,
         s3_key=s3_key,
+        iam_role=iam_role,
         s3_data=s3_data, 
         region=region,
         file_format=file_format,

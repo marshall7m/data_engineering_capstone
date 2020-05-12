@@ -1,7 +1,8 @@
-from operators import (LoadFactOperator, DataQualityOperator)
+from plugins import LoadFactOperator, DataQualityOperator, FactBranchOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow import DAG
 from datetime import datetime
+from airflow.operators.python_operator import BranchPythonOperator
 
 def create_fact_tables(
     start_date,
@@ -11,9 +12,8 @@ def create_fact_tables(
     subdag_name,
     redshift_conn_id,
     degree_list,
-    s3_data,
-    origin_table,
-    fact,
+    origin_table_format,
+    destination_table_format,
     sql,
     *args, **kwargs):
 
@@ -41,29 +41,41 @@ def create_fact_tables(
     )
 
     for degree in degree_list:
-        table = f'{degree}_{s3_data}_{fact}'
+        destination_table = destination_table_format.format(degree=degree)
+        origin_tables = {table:name.format(degree=degree) for (table,name) in origin_table_format.items()}
 
         start_task = DummyOperator(task_id=f'{degree}',  dag=dag)
 
-        create_task = LoadFactOperator(
-            task_id=table,
+        branch_task = FactBranchOperator(
+            task_id=f'{degree}_check_origin_tables',
             dag=dag,
-            origin_table=origin_table,
-            destination_table=table,
+            origin_tables=origin_tables,
+            destination_table=destination_table,
+            provide_context=True
+        )
+        
+        create_task = LoadFactOperator(
+            task_id=destination_table,
+            dag=dag,
             sql=sql,
             redshift_conn_id=redshift_conn_id,
+            destination_table=destination_table,
+            origin_tables=origin_tables,
             provide_context=True
         )
 
         check_task = DataQualityOperator(
-            task_id=f'{degree}_data_quality_check',
+            task_id='data_quality_check',
             dag=dag,
             redshift_conn_id=redshift_conn_id,
-            table=table,
+            table=destination_table,
             provide_context=True
         )
-
-        start_task >> create_task
+        
+        skip_task = DummyOperator(task_id='skipped',  dag=dag)
+        
+        start_task >> branch_task
+        branch_task >> [create_task, skip_task]
         create_task >> check_task
 
     return dag

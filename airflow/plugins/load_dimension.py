@@ -25,7 +25,7 @@ class LoadDimensionOperator(BaseOperator):
         self.table = table
         self.sql = sql
 
-    def execute(self, context, delete_existing_data=False):
+    def execute(self, context):
         """
         Loads data from staging table(s) to dimension table
         
@@ -33,13 +33,6 @@ class LoadDimensionOperator(BaseOperator):
         delete_existing_data -- Deletes existing data from table if True (bool)
         """
         redshift = PostgresHook(self.redshift_conn_id)
-
-        #Deletes existing data from table if True
-        if delete_existing_data == True:
-            self.log.info(f'Deleting data in {self.table} table')
-            redshift.run(f'DELETE FROM {self.table}')
-        else:
-            self.log.info(f'Loading data from staging table(s) to {self.table} table')
 
         self.log.info(f'LoadDimensionOperator loading {self.table} table')
         redshift.run(self.sql)

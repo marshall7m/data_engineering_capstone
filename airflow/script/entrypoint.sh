@@ -53,8 +53,7 @@ if [ "$AIRFLOW__CORE__EXECUTOR" != "SequentialExecutor" ]; then
     : "${POSTGRES_PASSWORD:="private"}"
     : "${POSTGRES_DB:="private"}"
     : "${POSTGRES_EXTRAS:-""}"
-
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN="postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}${POSTGRES_EXTRAS}"
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}${POSTGRES_EXTRAS}"
     export AIRFLOW__CORE__SQL_ALCHEMY_CONN
 
     # Check if the user has provided explicit Airflow configuration for the broker's connection to the database

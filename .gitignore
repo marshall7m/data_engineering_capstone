@@ -1,6 +1,9 @@
+__pycache__/
+.DS_Store
+unittests.cfg
+.ipynb_checkpoints/
+airflow.cfg
 data/
 raw_data/
-**/__pycache__/ 
-udacity_dwh.cfg
 iac_notebook.ipynb
-.ipynb_checkpoints/
+udacity_dwh.cfg

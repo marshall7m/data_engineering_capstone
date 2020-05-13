@@ -3,9 +3,9 @@ services:
     postgres:
         image: postgres:9.6
         environment:
-            - POSTGRES_USER=learning-projects
-            - POSTGRES_PASSWORD=Oldmans2ricebowls1tongs4graveyards3
-            - POSTGRES_DB=dwh
+            - POSTGRES_USER=private
+            - POSTGRES_PASSWORD=private
+            - POSTGRES_DB=private
         logging:
             options:
                 max-size: 10m

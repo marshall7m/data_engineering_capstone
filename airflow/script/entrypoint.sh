@@ -47,11 +47,11 @@ if [ "$AIRFLOW__CORE__EXECUTOR" != "SequentialExecutor" ]; then
   # Check if the user has provided explicit Airflow configuration concerning the database
   if [ -z "$AIRFLOW__CORE__SQL_ALCHEMY_CONN" ]; then
     # Default values corresponding to the default compose files
-    : "${POSTGRES_HOST:="udacity-analytics.cp3clvtjsfao.us-west-2.redshift.amazonaws.com"}"
+    : "${POSTGRES_HOST:="private"}"
     : "${POSTGRES_PORT:="5439"}"
-    : "${POSTGRES_USER:="learning-projects"}"
-    : "${POSTGRES_PASSWORD:="Oldmans2ricebowls1tongs4graveyards3"}"
-    : "${POSTGRES_DB:="dwh"}"
+    : "${POSTGRES_USER:="private"}"
+    : "${POSTGRES_PASSWORD:="private"}"
+    : "${POSTGRES_DB:="private"}"
     : "${POSTGRES_EXTRAS:-""}"
 
     AIRFLOW__CORE__SQL_ALCHEMY_CONN="postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}${POSTGRES_EXTRAS}"

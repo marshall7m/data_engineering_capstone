@@ -3,24 +3,25 @@ services:
     postgres:
         image: postgres:9.6
         environment:
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
+            - POSTGRES_USER=learning-projects
+            - POSTGRES_PASSWORD=Oldmans2ricebowls1tongs4graveyards3
+            - POSTGRES_DB=dwh
         logging:
             options:
                 max-size: 10m
                 max-file: "3"
         ports:
-            - "5432"
+            - "5439"
 
     webserver:
-        image: puckel/docker-airflow:1.10.9
+        image: my-airflow
+        # image: puckel/docker-airflow:1.10.9
         # image: puckel/docker-airflow:latest
-        build:
-            context: .
-            args:
-                PYTHON_DEPS: "boto3==1.12.41, notebook==6.0.3, numpy==1.18.1, pandas==0.25.3, psycopg2==2.8.4, psycopg2-binary==2.8.5, cryptography==2.9.2"
-                AIRFLOW_DEPS: "postgres, aws"
+        # build:
+        #     context: .
+        #     args:
+        #         PYTHON_DEPS: "apache-airflow==1.10.9, boto3==1.12.41, notebook==6.0.3, numpy==1.18.1, pandas==0.25.3, psycopg2-binary==2.8.5, cryptography==2.9.2"
+        #         AIRFLOW_DEPS: "postgres, aws"
         restart: always
         depends_on:
             - postgres
@@ -33,17 +34,15 @@ services:
                 max-file: "3"
         volumes:
             - ./dags:/usr/local/airflow/dags
-            # - ./plugins:/usr/local/airflow/plugins
-            - ./plugins/:/usr/local/airflow/plugins
+            - ./plugins:/usr/local/airflow/plugins
             - ./requirements.txt:/requirements.txt
         ports:
             - "8080"
         
         command: webserver
-        healthcheck:
-            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
-            interval: 30s
-            timeout: 30s
-            retries: 3
+        # healthcheck:
+        #     test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+        #     interval: 30s
+        #     timeout: 30s
+        #     retries: 3
 
-        

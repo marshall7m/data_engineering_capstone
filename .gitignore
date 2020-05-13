@@ -3,3 +3,4 @@ raw_data/
 **/__pycache__/ 
 udacity_dwh.cfg
 iac_notebook.ipynb
+.ipynb_checkpoints/

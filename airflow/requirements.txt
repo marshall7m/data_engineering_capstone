@@ -1,7 +1,9 @@
-apache-airflow==1.10.9
+cryptography==2.9.2
+docutils==0.15.2
 boto3==1.12.41
 notebook==6.0.3
 numpy==1.18.1
 pandas==0.25.3
 psycopg2-binary==2.8.5
+typing-extensions==3.7.4.2
 

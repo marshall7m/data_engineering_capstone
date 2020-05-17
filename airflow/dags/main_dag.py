@@ -4,13 +4,10 @@ from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.subdag_operator import SubDagOperator
 from airflow.operators.python_operator import (PythonOperator, BranchPythonOperator)
-from plugins import StageToRedshiftOperator, CreateSTLErrorTablesOperator
-from sql_queries import SqlQueries
-from stage_fact_dag import stage_fact_s3_to_redshift
-from stage_dim_dag import stage_dim_s3_to_redshift
-from fact_dag import create_fact_tables
-from dim_branch import dim_branch
-from load_stl_error_dict import get_error_tables
+from airflow.operators import StageToRedshiftOperator, CreateSTLErrorTablesOperator
+from airflow.operator_queries import SqlQueries
+from airflow.subdag_operator import stage_fact_s3_to_redshift, stage_dim_s3_to_redshift, create_fact_tables
+from airflow.operator_functions import dim_branch, get_error_tables
 
 execution_dates = {
     'date_range_1': {

@@ -3,25 +3,18 @@ services:
     postgres:
         image: postgres:9.6
         environment:
-            - POSTGRES_USER=private
-            - POSTGRES_PASSWORD=private
-            - POSTGRES_DB=private
+            - POSTGRES_USER=airflow_user
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_DB=airflow
         logging:
             options:
                 max-size: 10m
                 max-file: "3"
         ports:
-            - "5439"
+            - "5432"
 
     webserver:
         image: my-airflow
-        # image: puckel/docker-airflow:1.10.9
-        # image: puckel/docker-airflow:latest
-        # build:
-        #     context: .
-        #     args:
-        #         PYTHON_DEPS: "apache-airflow==1.10.9, boto3==1.12.41, notebook==6.0.3, numpy==1.18.1, pandas==0.25.3, psycopg2-binary==2.8.5, cryptography==2.9.2"
-        #         AIRFLOW_DEPS: "postgres, aws"
         restart: always
         depends_on:
             - postgres

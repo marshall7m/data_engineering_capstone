@@ -1,4 +1,7 @@
-from plugins import CreatedTableOperator, StageToRedshiftOperator, DataQualityOperator
+from operators.created_table_check import CreatedTableOperator
+from operators.stage_redshift import StageToRedshiftOperator
+from operators.data_quality import DataQualityOperator
+
 from airflow.operators.dummy_operator import DummyOperator
 from airflow import DAG
 from datetime import datetime

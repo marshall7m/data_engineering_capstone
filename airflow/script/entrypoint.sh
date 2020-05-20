@@ -41,8 +41,8 @@
     # airflow resetdb
     airflow initdb
     # airflow upgradedb
-    # airflow webserver -p 8080
-    # airflow scheduler 
+    airflow webserver -p 8080
+    airflow scheduler 
 
 
     # exec airflow webserver

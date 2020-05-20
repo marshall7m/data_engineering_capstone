@@ -7,3 +7,4 @@ data/
 raw_data/
 iac_notebook.ipynb
 udacity_dwh.cfg
+vs_workspace.code-workspace

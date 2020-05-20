@@ -1,4 +1,7 @@
-from plugins import LoadFactOperator, DataQualityOperator, FactBranchOperator
+from operators.load_fact import LoadFactOperator
+from operators.data_quality import DataQualityOperator
+from operators.fact_branch import FactBranchOperator
+
 from airflow.operators.dummy_operator import DummyOperator
 from airflow import DAG
 from datetime import datetime

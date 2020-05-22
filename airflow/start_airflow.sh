@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Start airflow
+airflow webserver -p 8080
 airflow scheduler --daemon
-airflow webserver --daemon -p 8080
 
 # Wait till airflow web-server is ready
 echo "Waiting for Airflow web server..."

@@ -1,11 +1,13 @@
 version: '3.7'
 services:
     postgres:
-        image: postgres:9.6
+        image: postgres
         environment:
             - POSTGRES_USER=airflow_user
             - POSTGRES_PASSWORD=password
-            - POSTGRES_DB=airflow
+            - POSTGRES_DB=db
+            - POSTGRES_HOST=postgres
+            - POSTGRES_PORT=5432
         logging:
             options:
                 max-size: 10m

@@ -1,6 +1,7 @@
 from operators.load_fact import LoadFactOperator
 from operators.data_quality import DataQualityOperator
 from operators.fact_branch import FactBranchOperator
+from operators.stl_check import STLCheckOperator
 
 from airflow.operators.dummy_operator import DummyOperator
 from airflow import DAG
@@ -49,12 +50,20 @@ def create_fact_tables(
 
         start_task = DummyOperator(task_id=f'{degree}',  dag=dag)
 
-        branch_task = FactBranchOperator(
-            task_id=f'{degree}_check_origin_tables',
-            dag=dag,
+        # branch_task = FactBranchOperator(
+        #     task_id=f'{degree}_check_origin_tables',
+        #     dag=dag,
+        #     origin_tables=origin_tables,
+        #     destination_table=destination_table,
+        #     provide_context=True
+        # )
+
+        check_stl_branch = STLCheckOperator(
+            task_id=f'stl_check',
+            table=origin_tables,
+            redshift_conn_id=redshift_conn_id,
             origin_tables=origin_tables,
-            destination_table=destination_table,
-            provide_context=True
+            destination_table=destination_table
         )
         
         create_task = LoadFactOperator(
@@ -75,10 +84,12 @@ def create_fact_tables(
             provide_context=True
         )
         
-        skip_task = DummyOperator(task_id='skipped',  dag=dag)
+        skip_task = DummyOperator(task_id='staging_failed',  dag=dag)
         
-        start_task >> branch_task
-        branch_task >> [create_task, skip_task]
+        # start_task >> branch_task
+        # branch_task >> [create_task, skip_task]
+        # create_task >> check_task
+        start_task >> check_stl_branch
+        check_stl_branch >> [create_task, skip_task]
         create_task >> check_task
-
     return dag

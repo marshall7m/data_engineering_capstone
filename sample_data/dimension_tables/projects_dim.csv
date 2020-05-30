@@ -1,0 +1,10 @@
+project_id,section_id,project_name,section_name,degree_name
+1,1,Write a Data Science Blog Post,Introduction to Data Science,Data Science
+2,2,Predicting Boston Housing Prices,Supervised Learning with Linear Regression,Data Science
+3,3,Netflix Dataset Clustering,Unsupervised Learning with K-Means,Data Science
+4,4,Analyze Experiment Results,Introduction to Data Analysis,Data Analytics
+5,5,Wrangle and Analyze Data,Data Wrangling with Pandas,Data Analytics
+6,6,Communicate Data Findings,Visualizations with Matplotlib,Data Analytics
+7,7,Build a Cloud Data Warehouse,Introduction to Data Engineering,Data Engineering
+8,8,Build a Data Lake,Data Lakes with Spark,Data Engineering
+9,9,Data Pipelines with Airflow,Data Pipelines with Airflow,Data Engineering

@@ -3,9 +3,9 @@ services:
     postgres:
         image: postgres
         environment:
-            - POSTGRES_USER=airflow_user
-            - POSTGRES_PASSWORD=password
-            - POSTGRES_DB=db
+            - POSTGRES_USER=
+            - POSTGRES_PASSWORD=
+            - POSTGRES_DB=
             - POSTGRES_HOST=postgres
             - POSTGRES_PORT=5432
         logging:
@@ -32,7 +32,7 @@ services:
             - ./plugins:/usr/local/airflow/plugins
             - ./requirements.txt:/requirements.txt
         ports:
-            - "8080"
+            - "8080:8080"
         
         command: webserver
         healthcheck:

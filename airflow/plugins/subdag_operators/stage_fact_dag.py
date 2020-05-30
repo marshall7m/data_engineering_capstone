@@ -1,6 +1,7 @@
 from operators.created_table_check import CreatedTableOperator
 from operators.stage_redshift import StageToRedshiftOperator
 from operators.data_quality import DataQualityOperator
+from airflow.operators.python_operator import (PythonOperator, BranchPythonOperator)
 
 from airflow.operators.dummy_operator import DummyOperator
 from airflow import DAG
@@ -75,8 +76,8 @@ def stage_fact_s3_to_redshift(
             extra_copy_parameters=extra_copy_parameters,
             provide_context=True
             )
-
-        check_task = DataQualityOperator(
+        #push count to xcom for stl count comparison
+        count_check_task = DataQualityOperator(
             task_id=f'data_quality_check_{table}',
             dag=dag,
             redshift_conn_id=redshift_conn_id,
@@ -86,6 +87,6 @@ def stage_fact_s3_to_redshift(
 
         start_task >> create_task
         create_task >> copy_task
-        copy_task >> check_task
+        copy_task >> count_check_task
 
     return dag

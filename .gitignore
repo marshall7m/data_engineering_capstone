@@ -6,6 +6,7 @@ airflow.cfg
 data/
 raw_data/
 iac_notebook.ipynb
-udacity_dwh.cfg
+redshift.cfg
 vs_workspace.code-workspace
 connections.py
+/logs/

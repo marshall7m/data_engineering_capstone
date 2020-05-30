@@ -1,0 +1,10 @@
+video_id,video_name,section_name,degree_name
+1,Program Introduciton,Introduction to Data Science,Data Science
+2,Overfitting,Supervised Learning with Linear Regression,Data Science
+3,Euclidean distance,Unsupervised Learning with K-Means,Data Science
+4,Program Introduction,Introduction to Data Analysis,Data Analytics
+5,Data Cleaning,Data Wrangling with Pandas,Data Analytics
+6,Histograms,Visualizations with Matplotlib,Data Analytics
+7,Program Introduction,Introduction to Data Engineering,Data Engineering
+8,SparkSQL,Data Lakes with Spark,Data Engineering
+9,DAGS,Data Pipelines with Airflow,Data Engineering

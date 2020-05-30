@@ -6,13 +6,11 @@ from airflow.operators.subdag_operator import SubDagOperator
 from airflow.operators.python_operator import (PythonOperator, BranchPythonOperator)
 
 from operators.stage_redshift import StageToRedshiftOperator
-from operators.stl_load_errors_tables import CreateSTLErrorTablesOperator
 from operator_queries.sql_queries import SqlQueries
 from subdag_operators.stage_fact_dag import stage_fact_s3_to_redshift 
 from subdag_operators.stage_dim_dag import stage_dim_s3_to_redshift
 from subdag_operators.fact_dag import create_fact_tables
 from operator_functions.dim_branch import dim_branch
-from operator_functions.load_stl_error_dict import get_error_tables
 
 execution_dates = {
     'date_range_1': {
@@ -203,12 +201,6 @@ stage_video_dim_subdag = SubDagOperator(
     dag=main_dag
 )
 
-get_stl_error_tables = PythonOperator(
-    task_id='get_stl_error_tables',
-    python_callable=get_error_tables,
-    op_kwargs={'redshift_conn_id': 'redshift'}
-)
-
 avg_project_rating_subdag = SubDagOperator(
     subdag=create_fact_tables(
         start_date=execution_dates['date_range_2']['start_date'],
@@ -311,14 +303,9 @@ avg_video_view_date_range_subdag = SubDagOperator(
     dag=main_dag
 )
 
-create_error_tables = CreateSTLErrorTablesOperator(
-    task_id='load_stl_error_tables',
-    redshift_conn_id='redshift',
-    dag=main_dag,
-    provide_context=True
-)
-
-end_operator = DummyOperator(task_id='Stop_execution', dag=main_dag)
+# end_operator = PythonOperator(task_id='Stop_execution',
+#                               dag=main_dag,
+#                               python_callable=reset_boolean_error_dict)
 
 start_operator >> [dim_branch,
                    stage_mentor_activity_subdag,
@@ -326,26 +313,16 @@ start_operator >> [dim_branch,
                    stage_project_feedback_subdag,
                    stage_section_feedback_subdag]
 
-#staging tables
+# staging tables
 dim_branch >> [stage_users_dim_subdag,
                stage_project_dim_subdag,
                stage_video_dim_subdag,
                skip_dims]
 
-
-get_stl_error_tables << [stage_mentor_activity_subdag,
-                         stage_video_log_subdag,
-                         stage_project_feedback_subdag,
-                         stage_section_feedback_subdag]
-
 # fact tables
+stage_mentor_activity_subdag >> [highest_mentor_activity_prompt_score_subdag, highest_mentor_activity_answer_score_subdag]
+stage_video_log_subdag >> [avg_video_view_date_range_subdag, avg_video_views_per_user_subdag]
+stage_project_feedback_subdag >> avg_project_rating_subdag
+stage_section_feedback_subdag >> avg_section_rating_subdag
 
-get_stl_error_tables >> [
-    avg_project_rating_subdag, 
-    avg_section_rating_subdag, 
-    highest_mentor_activity_prompt_score_subdag, 
-    highest_mentor_activity_answer_score_subdag,
-    avg_video_view_date_range_subdag,
-    avg_video_views_per_user_subdag,
-    create_error_tables
-    ]  >> end_operator
+

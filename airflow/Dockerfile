@@ -8,8 +8,10 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
     pip install 'apache-airflow[postgres]'
 
-
-COPY script/entrypoint.sh /entrypoint.sh
+RUN mkdir config
+COPY scripts/entrypoint.sh /entrypoint.sh
+COPY scripts/connections.sh /connections.sh
+COPY config/redshift.cfg /config/redshift.cfg
 COPY config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
 
 ENTRYPOINT ["/entrypoint.sh"]

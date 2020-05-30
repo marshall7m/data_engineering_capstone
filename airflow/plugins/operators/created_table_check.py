@@ -27,7 +27,7 @@ class CreatedTableOperator(BaseOperator):
         self.start_date = start_date
 
     def execute(self, context):
-        """Executes SQL create query for each table in dictionary"""
+        
         redshift = PostgresHook(self.redshift_conn_id)
         if context['execution_date'] == self.start_date:
             self.log.info(f'Deleting preexisting data from {self.table}')

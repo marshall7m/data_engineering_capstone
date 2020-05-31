@@ -2,7 +2,7 @@ __pycache__/
 .DS_Store
 unittests.cfg
 .ipynb_checkpoints/
-airflow.cfg
+redshift.cfg
 data/
 raw_data/
 iac_notebook.ipynb

@@ -3,6 +3,7 @@ __pycache__/
 unittests.cfg
 .ipynb_checkpoints/
 redshift.cfg
+airflow.cfg
 data/
 raw_data/
 iac_notebook.ipynb

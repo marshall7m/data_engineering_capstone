@@ -39,17 +39,14 @@ main_dag = DAG('udacity_analytics',
           description='Load monthly user and video analytics in Redshift with Airflow',
           start_date=execution_dates['date_range_1']['start_date'],
           end_date=execution_dates['date_range_1']['end_date'],
-          schedule_interval='@monthly'
+          schedule_interval='@monthly',
+          max_active_runs=1
 )
 
-# degree_list = [
-#     'data_science', 
-#     'data_analytics', 
-#     'data_engineering'
-# ]
-
 degree_list = [
-    'data_science'
+    'data_science', 
+    'data_analytics', 
+    'data_engineering'
 ]
 
 start_operator = DummyOperator(task_id='Begin_execution',  dag=main_dag)
@@ -262,7 +259,7 @@ highest_mentor_activity_answer_score_subdag = SubDagOperator(
         redshift_conn_id='redshift',
         origin_table_format={'table_1': '{degree}_mentor_activity'},
         destination_table_format='{degree}_highest_answer_score',
-        sql=SqlQueries.highest_mentor_activity_prompt_scores,
+        sql=SqlQueries.highest_mentor_activity_answer_scores,
         degree_list=degree_list
     ),
     task_id='highest_answer_score',

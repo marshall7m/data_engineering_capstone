@@ -78,70 +78,70 @@ class SqlQueries:
   DROP TABLE IF EXISTS {};
   CREATE TABLE {} AS 
   SELECT 
-    video_id, 
+    vl.video_id, 
     vd.video_name,
     vd.section_name,
-    CAST(AVG(vl.views_per_user) AS DECIMAL(10,1))
+    CAST(AVG(vl.views_per_user) AS DECIMAL(10,1)) avg
   FROM 
     {table_1} vl
   JOIN videos_dim vd
     ON vl.video_id = vd.video_id
   GROUP BY 
-    video_id 
+    vl.video_id, vd.video_name, vd.section_name
   ORDER BY 
-    CAST(AVG(vl.views_per_user) AS DECIMAL(10,1)) DESC
+    avg DESC
   """
 
   avg_video_view_date_range = """
   DROP TABLE IF EXISTS {};
   CREATE TABLE {} AS 
   SELECT 
-    video_id, 
+    vd.video_id, 
     vd.video_name,
     vd.section_name,
-    AVG(DATEDIFF(hour, vl.first_view_date, vl.last_view_date))
+    AVG(DATEDIFF(hour, vl.first_view_date, vl.last_view_date)) avg
   FROM 
     {table_1} vl
   JOIN videos_dim vd
     ON vd.video_id = vl.video_id
   GROUP BY 
-    video_id 
+    vd.video_id, vd.video_name, vd.section_name
   ORDER BY 
-    AVG(DATEDIFF(hour, vl.first_view_date, vl.last_view_date)) DESC
+    avg DESC
   """
 
   section_ratings = """
   DROP TABLE IF EXISTS {};
   CREATE TABLE {} AS 
   SELECT 
-    section_id,
+    sf.section_id,
     pd.section_name,
-    CAST(AVG(sf.rating) AS DECIMAL(10,1))
+    CAST(AVG(sf.rating) AS DECIMAL(10,1)) avg
   FROM 
     {table_1} sf
   JOIN projects_dim pd
     ON sf.section_id = pd.section_id
   GROUP BY
-    section_id
+    sf.section_id, pd.section_name
   ORDER BY 
-    CAST(AVG(sf.rating) AS DECIMAL(10,1)) ASC
+    avg ASC
   """
 
   project_ratings = """
   DROP TABLE IF EXISTS {};
   CREATE TABLE {} AS 
   SELECT 
-    project_id, 
+    pf.project_id, 
     pd.project_name,
-    CAST(AVG(pf.rating) AS DECIMAL(10,1))
+    CAST(AVG(pf.rating) AS DECIMAL(10,1)) avg
   FROM 
     {table_1} pf
   JOIN projects_dim pd
     ON pf.project_id = pd.section_id
   GROUP BY
-    project_id
+    pf.project_id, pd.project_name
   ORDER BY 
-    CAST(AVG(pf.rating) AS DECIMAL(10,1)) ASC
+    avg ASC
   """
 
   highest_mentor_activity_prompt_scores = """
@@ -152,7 +152,6 @@ class SqlQueries:
     user_id, 
     section_id, 
     project_id, 
-    degree_id, 
     prompt, 
     post_text, 
     post_score, 

@@ -6,7 +6,7 @@ airflow.cfg
 data/
 raw_data/
 iac_notebook.ipynb
-redshift.cfg
 vs_workspace.code-workspace
 connections.py
 /logs/
+docker-compose.yml

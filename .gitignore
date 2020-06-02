@@ -2,10 +2,11 @@ __pycache__/
 .DS_Store
 unittests.cfg
 .ipynb_checkpoints/
-redshift.cfg
+aws.cfg
 airflow.cfg
 data/
 raw_data/
 vs_workspace.code-workspace
 /logs/
 docker-compose.yml
+iac_notebook.ipynb

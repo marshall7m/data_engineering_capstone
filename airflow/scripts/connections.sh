@@ -12,14 +12,17 @@ for i in "${!arr[@]}"; do
 done
 
 #get aws and redshift config values
-. /config/redshift.cfg
+config() {
+    val=$(grep -E "^$1=" /config/aws.cfg | cut -d '=' -f 2-)
+    echo -n $val
+}
 
 # add redshift connection to airflow
-airflow connections --add --conn_id redshift --conn_type postgres --conn_host $DWH_HOST \
-                    --conn_login $DWH_DB_USER --conn_password $DWH_DB_PASSWORD \
-                    --conn_schema $DWH_DB --conn_port $DWH_PORT
+airflow connections --add --conn_id $(config DWH_CONN_ID) --conn_type postgres --conn_host $(config DWH_HOST) \
+                    --conn_login $(config DWH_DB_USER) --conn_password $(config DWH_DB_PASSWORD) \
+                    --conn_schema $(config DWH_DB) --conn_port $(config DWH_PORT)
 
 # add AWS connection to airflow
 
-airflow connections --add --conn_id aws_credentials --conn_type aws \
-                    --conn_login $KEY --conn_password $SECRET
+airflow connections --add --conn_id $(config AWS_CONN_ID) --conn_type aws \
+                    --conn_login $(config KEY) --conn_password $(config SECRET)

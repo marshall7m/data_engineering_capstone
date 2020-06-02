@@ -11,7 +11,7 @@ RUN pip install --upgrade pip && \
 RUN mkdir config
 COPY scripts/entrypoint.sh /entrypoint.sh
 COPY scripts/connections.sh /connections.sh
-COPY config/redshift.cfg /config/redshift.cfg
+COPY config/aws.cfg /config/aws.cfg
 COPY config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
 
 ENTRYPOINT ["/entrypoint.sh"]

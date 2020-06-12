@@ -18,7 +18,8 @@ class LoadFactOperator(BaseOperator):
         
         Keyword Arguments:
         redshift_conn_id -- Redshift connection ID configured in Airflow/admin/connection UI (str)
-        table -- Dimension table name (str)
+        origin_table -- Staging table name(s) needed for fact table (list)
+        table -- Fact table name (str)
         sql -- SQL insert command to execute on dimension table (str)
         """
         super(LoadFactOperator, self).__init__(*args, **kwargs)

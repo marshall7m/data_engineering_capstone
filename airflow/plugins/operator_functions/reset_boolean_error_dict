@@ -1,3 +1,0 @@
-def reset_boolean_error_dict():
-    error_table_processed = context['task_instance'].xcom_pull(key='error_table_bool_list')
-    error_table_processed = {}

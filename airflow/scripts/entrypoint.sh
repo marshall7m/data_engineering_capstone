@@ -2,16 +2,18 @@
 
 TRY_LOOP="20"
 
-# Global defaults and back-compat
+# default variables
+# give airflow a home
 : "${AIRFLOW_HOME:="/usr/local/airflow"}"
+# creates fernet key for secure airflow connection
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
-: "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Sequential}Executor}"
+# : "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Sequential}Executor}"
+#
+: "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Local}Executor}"
 
-
-export \
-  AIRFLOW_HOME \
-  AIRFLOW__CORE__FERNET_KEY \
-  AIRFLOW__CORE__EXECUTOR
+export AIRFLOW_HOME 
+export AIRFLOW__CORE__FERNET_KEY
+export AIRFLOW__CORE__EXECUTOR
 
 case "$1" in
   webserver)
@@ -21,14 +23,10 @@ case "$1" in
     airflow upgradedb
     echo 'deleting previous connections and adding connections in airflow:'
     bash /connections.sh
-    if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ] || [ "$AIRFLOW__CORE__EXECUTOR" = "SequentialExecutor" ]; 
-    then
-      airflow scheduler &
-    fi
+    airflow scheduler &
     exec airflow webserver -p 8080
     ;;
   worker|scheduler)
-    # Give the webserver time to run initdb.
     sleep 10
     exec airflow "$@"
     ;;
@@ -40,7 +38,6 @@ case "$1" in
     exec airflow "$@"
     ;;
   *)
-    # The command is something like bash, not an airflow subcommand. Just run it in the right environment.
     exec "$@"
     ;;
 esac

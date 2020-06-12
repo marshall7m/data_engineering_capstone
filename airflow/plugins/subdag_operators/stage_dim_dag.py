@@ -7,38 +7,40 @@ from airflow import DAG
 from datetime import datetime
 
 def stage_dim_s3_to_redshift(
-    start_date,
-    schedule_interval,
     parent_dag_name,
+    child_dag_name,
+    start_date,
+    end_date,
+    schedule_interval,
     redshift_conn_id,
     s3_data,
-    sql,
+    create_sql,
     table,
     s3_bucket,
     s3_key,
     iam_role,
     region,
     file_format,
-    end_date=None,
     *args, **kwargs):
 
     """
-    Subdag used to create staging table, copy data from s3 to staging table in redshift and lastly perform a data quality check.
+    Subdag used to create dimension table, copy data from s3 to Redshift dimension table and lastly perform a data quality check.
 
     Keyword Arguments:
-    parent_dag_name -- Parent dag name (dag_id parameter) defined in parent DAG variable (str)
-    redshift_conn_id   -- Redshift connection ID configured in Airflow/admin/connection UI (str)
-    aws_credentials_id -- AWS connection ID configured in Airflow/admin/connection UI (str)
+    parent_dag_name -- Parent DAG name defined in `main_dag.py` dag object
+    child_dag_name -- Child DAG name used to define subdag ID
+    redshift_conn_id   -- Redshift connection ID (str)
+    aws_credentials_id -- AWS connection ID (str)
     table -- Staging table name (str)
-    sql -- Create staging table query (str)
+    create_sql -- Create staging table query (str)
     s3_bucket -- AWS S3 bucket name (str)
     s3_key -- AWS S3 bucket data directory/file (str)
     region -- Redshift cluster configured region (str)
     file_format -- File format for AWS S3 files  (currently only: 'JSON' or 'CSV') (str)
     """
-    task_id = f'stage_{s3_data}'
+
     dag = DAG(
-        f'{parent_dag_name}.{task_id}',
+        dag_id=f"{parent_dag_name}.{child_dag_name}",
         start_date=start_date,
         end_date=end_date,
         schedule_interval=schedule_interval,
@@ -50,9 +52,9 @@ def stage_dim_s3_to_redshift(
     create_task = CreatedTableOperator(
         task_id=f'create_{table}_table',
         redshift_conn_id=redshift_conn_id,
-        sql=sql.format(table),
+        create_sql=create_sql.format(table),
         table=table,
-        start_date=start_date
+        provide_context=True
     )
 
     copy_task = StageToRedshiftOperator(

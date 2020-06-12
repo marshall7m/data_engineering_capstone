@@ -72,6 +72,9 @@ class StageToRedshiftOperator(BaseOperator):
         self.log.info('StageToRedshiftOperator instantiating AWS and Redshift connection variables')
         redshift = PostgresHook(self.redshift_conn_id)
 
+        session_id = redshift.get_records("select pid from STV_INFLIGHT")
+        self.log.info('session id: ', session_id[0][0])
+
         #Formats s3 key with context dictionary
         # rendered_key = self.s3_key.format(self.degree, *context, self.s3_data)
         s3_key_data = {

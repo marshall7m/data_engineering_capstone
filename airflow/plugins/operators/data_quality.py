@@ -8,8 +8,8 @@ class DataQualityOperator(BaseOperator):
     """ Performs data quality checks on a given BigQuery table list.
     
     Keyword Arguments:
-    bigquery_conn_id -- BigQuery connection ID configured in Airflow/admin/connection UI (str)
-    table_list -- List of SQL table names to be used for data quality check
+    redshift_conn_id -- Redshift connection ID (str)
+    table -- Redshift table name to be used for the data quality check
     """
     @apply_defaults
     def __init__(self,
@@ -23,14 +23,13 @@ class DataQualityOperator(BaseOperator):
     
 
     def execute(self, context):
-        """For every table in the table list, it checks the table count, raises a value error if the table count is zero or non-existent and logs the table count"""
+        """Checks the table count and skips downstream tasks if table count is zero"""
         redshift = PostgresHook(self.redshift_conn_id)
         self.log.info(f'DataQualityOperator is checking: {self.table}')
         records = redshift.get_records(f'SELECT COUNT(*) FROM {self.table}')
         table_count = records[0][0]
         self.log.info(f"{self.table} Count: {table_count}")
         if len(records) < 1 or len(records[0]) < 1 or records[0][0] < 1:
-            # raise ValueError(f"Data quality check failed. {self.table} returned no results")
             try:
                 self.log.info('Skipping downstream tasks')
                 self.skip(context['dag_run'],

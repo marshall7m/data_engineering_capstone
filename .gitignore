@@ -2,7 +2,6 @@ __pycache__/
 .DS_Store
 unittests.cfg
 .ipynb_checkpoints/
-aws.cfg
 airflow.cfg
 data/
 raw_data/

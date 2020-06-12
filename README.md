@@ -155,8 +155,6 @@ Example of stl_check operator failing to prevent downstream turmoil:
 
 ![stl_check_failed](img/stl_check_failed.png)
 
-# get staging fact failed cause of stl check to show downstream
-
 # Project Application
 
 ## Data Science Use Cases
@@ -209,7 +207,7 @@ Steps:
 
 - Clone this repo: `git clone https://github.com/marshall7m/data_engineering_capstone.git`
 
-- Fill in the configuration values within `aws.cfg`
+- Fill in the AWS info within `aws.cfg` and postgres database info within `docker-compose.yml`
 
 - Run cells within `iac_notebook.ipynb` to launch a Redshift cluster, create S3 bucket
 

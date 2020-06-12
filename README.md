@@ -1,4 +1,5 @@
 # Data Engineering Capstone Project
+
 Automated Airflow data pipeline that loads data from AWS S3 to AWS Redshift for user activity analytics.
 
 ## Repo Directories and Files Dictionary
@@ -26,7 +27,6 @@ Automated Airflow data pipeline that loads data from AWS S3 to AWS Redshift for 
 
 ## Project Scope
 Being enrolled in an online education program inspired me to revolve this project around online learning user data. I was hoping to access Udacity's user data for this project. Although after asking Udacity's support team, they politely declined my request. Given that this project is focused on the data pipeline process, data integrity isn't as important. As for plan b, I decided to create numerical user data and use publicly accessible text data.  
-
 
 ## Datasets
 
@@ -89,7 +89,7 @@ s3://udacity-de-capstone/dimensional_tables/users_dim.csv
 
 #### Dimension Files
 
-##### `users_dim.csv` : 
+`users_dim.csv` : 
     - user_id: Student's user id
     - name: Student's name
     - github_handle: Student's GitHub handle 
@@ -98,7 +98,7 @@ s3://udacity-de-capstone/dimensional_tables/users_dim.csv
     - company: Company student is currently working at
 
 
-##### `projects_dim.csv`: 
+`projects_dim.csv`: 
 
     - project_id: Program's project id
     - section_id: Program's section id
@@ -106,7 +106,7 @@ s3://udacity-de-capstone/dimensional_tables/users_dim.csv
     - section_name: Section name
     - degree_name: Nano degree name
 
-##### `videos_dim.csv`:
+`videos_dim.csv`:
 
     - video_id: Program's video id
     - video_name: Video name
@@ -149,16 +149,18 @@ Both the staging and fact subdags can easily scale up the number of degrees or c
 
 ### STLCheckOperator
 
-The STLCheckOperator is used within each staging subdag associated with fact table creation downstream. STLCheckOperator loads STL error rows into separate Redshift error tables. The downstream stl_check operator fails to prevent fact tables downstream to be created with data integrity issues. The user can then make changes to the rows within the error table and insert the fixed rows back into the staging table. After the error table is dropped, the user can re-run the stl_check operator to allows downstream fact tables to be created. The STLCheckOperator allows the user to fix the errors in one centralized table without having to seach through files in S3. It also eliminates the need to re-run the entire staging task once the errors are fixed since the fixed rows can be inserted into the staging table. 
+The STLCheckOperator is used within each staging subdag associated with fact table creation downstream. STLCheckOperator loads STL error rows into separate Redshift error tables. The downstream stl_check operator fails to prevent fact tables downstream to be created with data integrity issues. The user can then make changes to the rows within the error table and insert the fixed rows back into the staging table. After the error table is dropped, the user can re-run the stl_check operator to allows downstream fact tables to be created. The STLCheckOperator allows the user to fix the errors in one centralized table without having to search through files in S3. It also eliminates the need to re-run the entire staging task once the errors are fixed since the fixed rows can be inserted into the staging table. 
 
 Example of stl_check operator failing to prevent downstream turmoil:
 
 ![stl_check_failed](img/stl_check_failed.png)
 
+# get staging fact failed cause of stl check to show downstream
+
 # Project Application
 
 ## Data Science Use Cases
-- Build binary classification models to predict student churn rate given users activity in the course(s), 
+- Build binary classification models to predict student churn rate given users activity in the course(s).
 
 - Develop behavioral segmentation sample groups used for email marketing  A/B testing based upon user activity within fact tables and user demographics within user dimension tables.
 
@@ -212,7 +214,6 @@ Steps:
 - Run cells within `iac_notebook.ipynb` to launch a Redshift cluster, create S3 bucket
 
 - Optional: Configure Airflow DAG scheduling within `main_dag.py` (default is set to monthly with start_date = 1/1/2019 and end_date = 2/1/2019)
-
 
 - Download Docker Desktop using this link: https://docs.docker.com/get-docker/
 

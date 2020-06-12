@@ -3,6 +3,7 @@ __pycache__/
 unittests.cfg
 .ipynb_checkpoints/
 airflow.cfg
+aws.cfg
 data/
 raw_data/
 vs_workspace.code-workspace

@@ -23,14 +23,7 @@ case "$1" in
     airflow upgradedb
     echo 'deleting previous connections and adding connections in airflow:'
     bash /connections.sh
-<<<<<<< HEAD
     airflow scheduler &
-=======
-    if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ]; 
-    then
-      airflow scheduler &
-    fi
->>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
     exec airflow webserver -p 8080
     ;;
   worker|scheduler)

@@ -151,9 +151,11 @@ Both the staging and fact subdags can easily scale up the number of degrees or c
 
 The STLCheckOperator is used within each staging subdag associated with fact table creation downstream. STLCheckOperator loads STL error rows into separate Redshift error tables. The downstream stl_check operator fails to prevent fact tables downstream to be created with data integrity issues. The user can then make changes to the rows within the error table and insert the fixed rows back into the staging table. After the error table is dropped, the user can re-run the stl_check operator to allows downstream fact tables to be created. The STLCheckOperator allows the user to fix the errors in one centralized table without having to search through files in S3. It also eliminates the need to re-run the entire staging task once the errors are fixed since the fixed rows can be inserted into the staging table. 
 
-Example of stl_check operator failing to prevent downstream turmoil:
+Example of stl_check operator failing failing to prevent downstream turmoil:
 
 ![stl_check_failed](img/stl_check_failed.png)
+
+![pause_downstream](img/pause_downstream.png)
 
 # Project Application
 

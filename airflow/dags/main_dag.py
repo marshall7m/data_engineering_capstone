@@ -226,6 +226,7 @@ avg_project_rating_subdag = SubDagOperator(
         upstream_subdag_id=main_dag.dag_id + '.' + 'stage_video_log'
     ),
     task_id='avg_project_rating',
+    trigger_rule='all_done',
     dag=main_dag
 )
 
@@ -244,6 +245,7 @@ avg_section_rating_subdag = SubDagOperator(
         upstream_subdag_id=main_dag.dag_id + '.' + 'stage_section_feedback'
     ),
     task_id='avg_section_rating',
+    trigger_rule='all_done',
     dag=main_dag
 )
 
@@ -262,6 +264,7 @@ highest_mentor_activity_prompt_score_subdag = SubDagOperator(
         upstream_subdag_id=main_dag.dag_id + '.' + 'stage_mentor_activity'
     ),
     task_id='highest_prompt_score',
+    trigger_rule='all_done',
     dag=main_dag
 )
 
@@ -280,6 +283,7 @@ highest_mentor_activity_answer_score_subdag = SubDagOperator(
         upstream_subdag_id=main_dag.dag_id + '.' + 'stage_mentor_activity'
     ),
     task_id='highest_answer_score',
+    trigger_rule='all_done',
     dag=main_dag
 )
 
@@ -298,6 +302,7 @@ avg_video_views_per_user_subdag = SubDagOperator(
         upstream_subdag_id=main_dag.dag_id + '.' + 'stage_video_log'
     ),
     task_id='avg_video_views_per_user',
+    trigger_rule='all_done',
     dag=main_dag
 )
 

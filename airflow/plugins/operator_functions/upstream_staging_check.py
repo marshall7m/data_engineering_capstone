@@ -12,10 +12,6 @@ def upstream_staging_check(origin_tables, upstream_subdag_id, **kwargs):
     for table in origin_tables:
         # pulls staging_success_check xcom value from upstream subdag
         upstream_staging_success = kwargs['task_instance'].xcom_pull(dag_id=upstream_subdag_id, key=f'staging_success_check_{table}')
-        if upstream_staging_success == None:
-            upstream_staging_success = kwargs['task_instance'].xcom_pull(key=f'staging_success_check_{table}')
-        else:
-            pass
         #if table wasn't loaded successfully fail task
         if upstream_staging_success == False:
             print(f'Fix {table} error table')

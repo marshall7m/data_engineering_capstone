@@ -1,6 +1,10 @@
 # Data Engineering Capstone Project
 
+<<<<<<< HEAD
 Automated Airflow data pipeline that loads data from AWS S3 to AWS Redshift for user activity analytics.
+=======
+Automated Airflow data pipeline that loads data from AWS S3 to AWS Redshift and executes analytic queries needed by the data team.
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 ## Repo Directories and Files Dictionary
 
@@ -26,7 +30,11 @@ Automated Airflow data pipeline that loads data from AWS S3 to AWS Redshift for 
 
 
 ## Project Scope
+<<<<<<< HEAD
 Being enrolled in an online education program inspired me to revolve this project around online learning user data. I was hoping to access Udacity's user data for this project. Although after asking Udacity's support team, they politely declined my request. Given that this project is focused on the data pipeline process, data integrity isn't as important. As for plan b, I decided to create numerical user data and use publicly accessible text data.  
+=======
+Being enrolled in an online education program inspired me to revolve this project around online learning user data. I was hoping to access Udacity's user data for this project. Although after asking Udacity's support team, they politely declined my request. Given that this project is focused on the data pipeline process, data integrity isn't as important. As for plan b, I decided to create my own synthetic Udacity data using publicly accesible text data (creating unique large scale Udacity text data would be a quite an ordeal).  
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 ## Datasets
 
@@ -123,10 +131,13 @@ As you can see in the diagram above, the user_id is the primary key for the majo
 
 ### Staging Subdags
 All S3 data is processed either in the staging fact or staging dimension subdag. The fact subdag processes fact table related data while the dimensional subdag processes dimension table related data. The subdag uses AWS and Redshift connection hooks to execute three major tasks.
+<<<<<<< HEAD
 
 Graph view of the main dag:
 
 ![main_dag](img/dag.png)
+=======
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 ### Staging Subdag Tasks
 
@@ -144,6 +155,7 @@ Graph view of the data science staging subdag:
 
 ### Dynamic Subdag Parameterization
 
+<<<<<<< HEAD
 Both the staging and fact subdags can easily scale up the number of degrees or courses added to the data pipeline with a minimal amount of extra code. Additional degrees can be incorporated into the data pipeline by importing the necessary data to the s3 bucket and adding the degree name to the degree_list within the main dag file. The degree list is looped through the subdag while the subdag formats the task and table names with the table type and degree name. Having dynamic subdags decreases the amount of hardcoded tasks and increases task parallelization. In addition, it allows efficient distributed bug fixes and clear high-level visibility within the Airflow UI DAG graph view.
 
 
@@ -156,22 +168,39 @@ Example of stl_check operator failing to prevent downstream turmoil:
 ![stl_check_failed](img/stl_check_failed.png)
 
 # get staging fact failed cause of stl check to show downstream
+=======
+Both the staging and fact subdags can easily scale up the amount of degrees or courses added to the data pipeline with minimal amount of extra code. Additional degrees can be incorporated into the data pipeline by importing the necessary data to the s3 bucket and adding the degree name to the degree_list within the main dag file. The degree list is looped through the subdag while the subdag formats the task and table names with the table type and degree name. Having dynamic subdags decreases the amount of hardcoded tasks and increases task parrelization. In addition, it allows efficient distributed bug fixes and clear high level visibility within the Airflow UI DAG graph view.
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 # Project Application
 
 ## Data Science Use Cases
+<<<<<<< HEAD
 - Build binary classification models to predict student churn rate given users activity in the course(s), 
 
 - Develop behavioral segmentation sample groups used for email marketing  A/B testing based upon user activity within fact tables and user demographics within user dimension tables.
 
 - Discover insights on which videos have the most views per user. Use other sources within the data warehouse such as mentor activity, user's section or project feedback to investigate possible reasons why those videos have a high retention rate.
+=======
+- Building a binary classification model to predict the student churn rate given the user activity in course, sentiment in feedback/mentor questions.
+
+- Determine which sample groups to be used for email promotions/advertisiments based upon trends within the user activity data
+
+- Create word counter visualization of the most common feedback phrases
+
+- Discover insights on which videos have the most views per user and why those videos are being replayed based upon users questions within mentor help page and user's section and project feedback.
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 ## Why technologies:
 
 ### Airflow:
+<<<<<<< HEAD
 Airflow's dynamic subdag and task parameterization are what make Airflow the best workflow management tool for this data pipeline. As mentioned in the "Dynamic Subdag Parameterization" section, Airflow's dynamic capabilities minimized the amount of hard-coded tasks. 
 
 In addition, Airflow's amazing graph and tree view UI gives a great birds-eye view of the data pipeline design. Both views came in handy for debugging and optimizing task dependencies. 
+=======
+Airflow is has a simple UI and easy subdag and custom operator integration. Airflow's amazing graph and tree view UI gives a great bird eye view of the data pipeline design. Both visual views came in handy for debugging and optimizing task dependencies. The process of creating custom operators and subdags were both intuitive and easy to glue together in the main DAG. The only con would be the dreaded subdag deadlock error given it's foreign terms and it's inconsistency.
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 ### AWS S3:
 
@@ -184,23 +213,35 @@ Redshift was used to take advantage of Redshift's MPP (massive parallel processi
 ## Scenarios
 
 ### Data Pipeline Scheduling:
+<<<<<<< HEAD
 The data pipeline was scheduled to run on a monthly basis. Although in a production environment it depends on the application of the data pipeline and preference of the client. In my opinion, this specific data pipeline would probably be used for analytics rather than day-to-day operational reports so a longer interval of bi-weekly or monthly basis seems appropriate. 
+=======
+The data pipeline was scheduled to run on a monthly basis. Although in a production environment it really all depend on the preference of the clients and application of the data pipeline. In my opinion, the data would probably be used for anayltics rather than day-to-day operational reports so a longer interval of bi-weekly or monthly seems appropriate. 
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 ### Data Scalibility:
 
 In a given situation where the data were increased by 100x, I would advise increasing the amount of DC2 compute nodes within the cluster to meet the demand. Although if the amount of DC2.xlarge nodes is greater than or equal to eight or any DS2.8xlarge nodes are used, it is recommended to switch over to RA3 according to [AWS.]('https://aws.amazon.com/redshift/pricing/')
 
 ### Data Accesibility:
+<<<<<<< HEAD
 If the data produced by the data pipeline was used on a daily operational level then the DAG scheduled interval parameter can be easily changed to execute a daily basis at an optimal time. In this case, it may be helpful to define SLA given the tighter time constraints.
+=======
+If the data produced by the data pipeline was used on a daily operational level then the DAG scheduled interval parameter can be easily changed to execute a daily basis at an optimal time. In this case it may be helpful to define SLA.
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 In a scenario where the database was needed to be accessed by hundreds of people, the database privileges and CPU resources would need to change. On the scale of a hundred users, I would advise partitioning each user into specified groups with different privileges. Each user will be given appropriate access to the Airflow data pipeline, AWS S3 bucket, and AWS Redshift cluster. For example, data engineers would likely have admin privileges and data scientists/analysts would have S3 read access and Redshift read/write access. 
 
+<<<<<<< HEAD
 In regards to AWS resources, CPU would need to be scaled up or upgraded to higher processing power. In addition, table partitions within the Redshift distributed database could be optimized to decrease query runtime. 
 
+=======
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 # Run the Code
 
 Steps:
 
+<<<<<<< HEAD
 - If homebrew and git is not installed (macOS/Linux), paste commands separately within your terminal:
 
     - `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
@@ -214,6 +255,19 @@ Steps:
 - Run cells within `iac_notebook.ipynb` to launch a Redshift cluster, create S3 bucket
 
 - Optional: Configure Airflow DAG scheduling within `main_dag.py` (default is set to monthly with start_date = 1/1/2019 and end_date = 2/1/2019)
+=======
+
+
+- If homebrew and git is not installed (macOS/Linux), paste commands separately within your terminal:
+
+    - `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+
+    - `brew install git`
+
+- Clone this repo: `git clone https://github.com/marshall7m/data_engineering_capstone.git`
+
+- Run cells within `iac_notebook.ipynb`
+>>>>>>> 0f3f5dd3787d5a17e6f597a4889936a7ed6bad4d
 
 - Download Docker Desktop using this link: https://docs.docker.com/get-docker/
 

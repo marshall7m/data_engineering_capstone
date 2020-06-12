@@ -6,8 +6,7 @@ aws.cfg
 airflow.cfg
 data/
 raw_data/
-iac_notebook.ipynb
 vs_workspace.code-workspace
-connections.py
 /logs/
 docker-compose.yml
+iac_notebook.ipynb

@@ -8,6 +8,7 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt && \
     pip install 'apache-airflow[postgres]'==1.10.10 \
     --constraint https://raw.githubusercontent.com/apache/airflow/1.10.10/requirements/requirements-python3.7.txt
+    #install once airflow 1.10.11 is available 
     # pip install 'apache-airflow[postgres]'==1.10.11 \
     # --constraint https://raw.githubusercontent.com/apache/airflow/1.10.11/requirements/requirements-python3.7.txt
 

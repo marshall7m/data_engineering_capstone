@@ -7,13 +7,14 @@ TRY_LOOP="20"
 : "${AIRFLOW_HOME:="/usr/local/airflow"}"
 # creates fernet key for secure airflow connection
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
-# : "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Sequential}Executor}"
-#
 : "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Local}Executor}"
 
 export AIRFLOW_HOME 
 export AIRFLOW__CORE__FERNET_KEY
 export AIRFLOW__CORE__EXECUTOR
+
+echo 'ls'
+ls
 
 case "$1" in
   webserver)

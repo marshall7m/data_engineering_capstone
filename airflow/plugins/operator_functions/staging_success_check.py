@@ -4,7 +4,7 @@ from airflow import AirflowException
 from airflow.hooks.postgres_hook import PostgresHook
 
 def staging_success_check(redshift_conn_id,
-                          table,
+                          staging_table,
                           error_table, 
                           overide_to_success=False, 
                           **context):
@@ -32,12 +32,12 @@ def staging_success_check(redshift_conn_id,
         #if error table doesn't exits then push task x_com to true for downstream check
         if error_table_exists[0][0] == 0 or error_table_exists[0] == 0:
             print('Staging Check Success')
-            context['task_instance'].xcom_push(key=f'staging_success_check_{table}', value=True)
+            context['task_instance'].xcom_push(key=f'staging_success_check_{staging_table}', value=True)
         else:
             #if error table does exists then push task x_com to true for downstream check
             print(f'{error_table} still exists. Under "Fix STL Error Table" section in `iac_notebook.ipynb`, fix stl errors in {error_table}, insert fixed rows into related staging table  \
                 and delete {error_table} from Redshift data warehouse. Once those steps are completed, re-run this task.')
-            context['task_instance'].xcom_push(key=f'staging_success_check_{table}', value=False)
+            context['task_instance'].xcom_push(key=f'staging_success_check_{staging_table}', value=False)
             # raises exception to fail task
             raise AirflowException
             # raise AirflowFailException

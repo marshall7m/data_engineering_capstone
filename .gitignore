@@ -6,6 +6,7 @@ airflow.cfg
 aws.cfg
 data/
 raw_data/
+sample_data/
 vs_workspace.code-workspace
 /logs/
 docker-compose.yml

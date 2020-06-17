@@ -13,9 +13,6 @@ export AIRFLOW_HOME
 export AIRFLOW__CORE__FERNET_KEY
 export AIRFLOW__CORE__EXECUTOR
 
-echo 'ls'
-ls
-
 case "$1" in
   webserver)
     echo 'initialize airflow db'

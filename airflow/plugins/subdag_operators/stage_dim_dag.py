@@ -15,8 +15,8 @@ def stage_dim_s3_to_redshift(
     redshift_conn_id,
     s3_data,
     create_sql,
-    table,
-    s3_bucket,
+    staging_table,
+    bucket,
     s3_key,
     iam_role,
     region,
@@ -31,9 +31,9 @@ def stage_dim_s3_to_redshift(
     child_dag_name -- Child DAG name used to define subdag ID
     redshift_conn_id   -- Redshift connection ID (str)
     aws_credentials_id -- AWS connection ID (str)
-    table -- Staging table name (str)
+    staging_table -- Staging table name (str)
     create_sql -- Create staging table query (str)
-    s3_bucket -- AWS S3 bucket name (str)
+    bucket -- AWS S3 bucket name (str)
     s3_key -- AWS S3 bucket data directory/file (str)
     region -- Redshift cluster configured region (str)
     file_format -- File format for AWS S3 files  (currently only: 'JSON' or 'CSV') (str)
@@ -47,22 +47,22 @@ def stage_dim_s3_to_redshift(
         **kwargs
     )
 
-    start_task = DummyOperator(task_id=f'{table}',  dag=dag)
+    start_task = DummyOperator(task_id=f'{staging_table}',  dag=dag)
     
     create_task = CreatedTableOperator(
-        task_id=f'create_{table}_table',
+        task_id=f'create_{staging_table}_table',
         redshift_conn_id=redshift_conn_id,
-        create_sql=create_sql.format(table),
-        table=table,
+        create_sql=create_sql.format(staging_table),
+        table=staging_table,
         provide_context=True
     )
 
     copy_task = StageToRedshiftOperator(
-        task_id=f'staging_{table}_table',
+        task_id=f'staging_{staging_table}_table',
         dag=dag,
-        table=table,
+        table=staging_table,
         redshift_conn_id=redshift_conn_id,
-        s3_bucket=s3_bucket,
+        bucket=bucket,
         s3_key=s3_key,
         iam_role=iam_role,
         s3_data=s3_data, 
@@ -72,10 +72,10 @@ def stage_dim_s3_to_redshift(
     )
 
     check_task = DataQualityOperator(
-        task_id=f'data_quality_check_{table}',
+        task_id=f'data_quality_check_{staging_table}',
         dag=dag,
         redshift_conn_id=redshift_conn_id,
-        table=table,
+        table=staging_table,
         provide_context=True
     )
 

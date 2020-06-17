@@ -144,7 +144,7 @@ Graph view of the data science staging subdag:
 
 ### Dynamic Subdag Parameterization
 
-Both the staging and fact subdags can easily scale up the number of degrees or courses added to the data pipeline with a minimal amount of extra code. Additional degrees can be incorporated into the data pipeline by importing the necessary data to the s3 bucket and adding the degree name to the degree_list within the main dag file. The degree list is looped through the subdag while the subdag formats the task and table names with the table type and degree name. Having dynamic subdags decreases the amount of hardcoded tasks and increases task parallelization. In addition, it allows efficient distributed bug fixes and clear high-level visibility within the Airflow UI DAG graph view.
+Both the staging and fact subdags can easily scale up the number of degrees or courses added to the data pipeline with a minimal amount of extra code. Additional degrees can be incorporated into the data pipeline by importing the necessary data to the S3 bucket and adding the degree name to the degree_list within the main dag file. The degree list is looped through the main DAG while the subdag formats the task and table names with the data source and degree name. Having dynamic subdags decreases the amount of hardcoded tasks and increases task parallelization. In addition, it allows efficient distributed bug fixes and clear high-level visibility within the Airflow UI DAG graph view.
 
 
 ### STLCheckOperator
@@ -162,7 +162,7 @@ Example of stl_check operator failing failing to prevent downstream turmoil:
 ## Data Science Use Cases
 - Build binary classification models to predict student churn rate given users activity in the course(s).
 
-- Develop behavioral segmentation sample groups used for email marketing  A/B testing based upon user activity within fact tables and user demographics within user dimension tables.
+- Develop behavioral segmentation sample groups used for email marketing A/B testing. The sample groups can be based upon user activity results within the fact tables and user demographics within the user dimension tables.
 
 - Discover insights on which videos have the most views per user. Use other sources within the data warehouse such as mentor activity, user's section or project feedback to investigate possible reasons why those videos have a high retention rate.
 
@@ -184,14 +184,14 @@ Redshift was used to take advantage of Redshift's MPP (massive parallel processi
 ## Scenarios
 
 ### Data Pipeline Scheduling:
-The data pipeline was scheduled to run on a monthly basis. Although in a production environment it depends on the application of the data pipeline and preference of the client. In my opinion, this specific data pipeline would probably be used for analytics rather than day-to-day operational reports so a longer interval of bi-weekly or monthly basis seems appropriate. 
+The data pipeline was scheduled to run on a monthly basis. Although in a production environment it depends on the application of the data pipeline and preference of the client. In my opinion, this data pipeline would probably be used for analytics rather than day-to-day operational reports. A longer interval of bi-weekly or monthly basis seems appropriate. 
 
 ### Data Scalibility:
 
 In a given situation where the data were increased by 100x, I would advise increasing the amount of DC2 compute nodes within the cluster to meet the demand. Although if the amount of DC2.xlarge nodes is greater than or equal to eight or any DS2.8xlarge nodes are used, it is recommended to switch over to RA3 according to [AWS.]('https://aws.amazon.com/redshift/pricing/')
 
 ### Data Accesibility:
-If the data produced by the data pipeline was used on a daily operational level then the DAG scheduled interval parameter can be easily changed to execute a daily basis at an optimal time. In this case, it may be helpful to define SLA given the tighter time constraints.
+If the data produced by the data pipeline was used on a daily operational level then the DAG scheduled interval parameter can be easily changed to execute a daily basis at an optimal time. In this case, it may be helpful to define SLA (service level agreement) for the DAG given the tighter time constraints.
 
 In a scenario where the database was needed to be accessed by hundreds of people, the database privileges and CPU resources would need to change. On the scale of a hundred users, I would advise partitioning each user into specified groups with different privileges. Each user will be given appropriate access to the Airflow data pipeline, AWS S3 bucket, and AWS Redshift cluster. For example, data engineers would likely have admin privileges and data scientists/analysts would have S3 read access and Redshift read/write access. 
 
@@ -211,7 +211,7 @@ Steps:
 
 - Fill in the AWS info within `aws.cfg` and postgres database info within `docker-compose.yml`
 
-- Run cells within `iac_notebook.ipynb` to launch a Redshift cluster, create S3 bucket
+- Run cells within `iac_notebook.ipynb` to launch a Redshift cluster and create a S3 bucket
 
 - Optional: Configure Airflow DAG scheduling within `main_dag.py` (default is set to monthly with start_date = 1/1/2019 and end_date = 2/1/2019)
 

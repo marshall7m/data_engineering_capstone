@@ -1,4 +1,4 @@
-cryptography==2.9.2
+cryptography==3.2
 docutils==0.15.2
 boto3==1.12.41
 notebook==6.0.3
